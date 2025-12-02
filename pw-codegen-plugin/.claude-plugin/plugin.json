@@ -1,0 +1,8 @@
+{
+  "name": "pw-codegen-plugin",
+  "description": "Generate playwright code",
+  "version": "1.0.0",
+  "author": {
+    "name": "Atul"
+  }
+}

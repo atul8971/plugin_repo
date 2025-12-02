@@ -1,0 +1,13 @@
+{
+"name": "test-marketplace",
+"owner": {
+"name": "Test User"
+},
+"plugins": [
+{
+  "name": "playwright-codegen-plugin",
+  "source": "./pw-codegen-plugin",
+  "description": "My first test plugin"
+}
+]
+}
