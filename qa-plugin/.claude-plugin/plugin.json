@@ -1,5 +1,5 @@
 {
-  "name": "pw-codegen-plugin",
+  "name": "qa-plugin",
   "description": "Generate playwright code",
   "version": "1.0.0",
   "author": {

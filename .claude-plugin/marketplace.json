@@ -5,9 +5,9 @@
 },
 "plugins": [
 {
-  "name": "playwright-codegen-plugin",
-  "source": "./pw-codegen-plugin",
-  "description": "My first test plugin"
+  "name": "qa-plugin",
+  "source": "./qa-plugin",
+  "description": "All Plugin Required for QA"
 }
 ]
 }
