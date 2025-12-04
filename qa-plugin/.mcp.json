@@ -14,15 +14,29 @@
         "run",
         "-i",
         "--rm",
+        "-e", "CONFLUENCE_URL",
+        "-e", "CONFLUENCE_USERNAME",
+        "-e", "CONFLUENCE_API_TOKEN",
         "-e", "JIRA_URL",
         "-e", "JIRA_USERNAME",
         "-e", "JIRA_API_TOKEN",
         "ghcr.io/sooperset/mcp-atlassian:latest"
       ],
       "env": {
+        "CONFLUENCE_URL": "${CONFLUENCE_URL}",
+        "CONFLUENCE_USERNAME": "${CONFLUENCE_USERNAME}",
+        "CONFLUENCE_API_TOKEN": "${CONFLUENCE_API_TOKEN}",
         "JIRA_URL": "${JIRA_URL}",
         "JIRA_USERNAME": "${JIRA_USERNAME}",
         "JIRA_API_TOKEN": "${JIRA_API_TOKEN}"
+      }
+    },
+    "mcp-gsheets": {
+      "command": "npx",
+      "args": ["-y", "mcp-gsheets@latest"],
+      "env": {
+        "GOOGLE_PROJECT_ID": "${GOOGLE_PROJECT_ID}",
+        "GOOGLE_APPLICATION_CREDENTIALS": "${GOOGLE_APPLICATION_CREDENTIALS}"
       }
     }
   }
