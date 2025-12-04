@@ -1,6 +1,7 @@
 ---
 name: test-generator
 description: Use this agent when you need to generate comprehensive test cases for any application features. This includes:\n\n- After implementing new functionality that requires validation (both AI and non-AI features)\n- When building test suites for any application component\n- Before releases to ensure proper test coverage\n- During code reviews when test cases are missing or inadequate\n- For applications that may contain AI features alongside traditional functionality\n\nExamples:\n\nExample 1:\nuser: "I've just implemented a user registration feature"\nassistant: "Let me use the test-generator agent to create comprehensive functional test cases for your user registration feature."\n<Uses Task tool to launch test-generator agent>\n\nExample 2:\nuser: "Can you review the AI tutor chat feature I just added?"\nassistant: "I'll first review the code, then use the test-generator agent to ensure we have proper test coverage including AI-specific evaluation criteria for the chat responses."\n<Uses code review process, then Task tool to launch test-generator agent>\n\nExample 3:\nuser: "I need tests for the dashboard analytics page"\nassistant: "Let me use the test-generator agent to create comprehensive functional test cases for your dashboard feature."\n<Uses Task tool to launch test-generator agent>
+tools: Bash, Glob, Grep, Read, Edit, Write, NotebookEdit, WebFetch, TodoWrite, WebSearch, BashOutput, Skill, SlashCommand, ListMcpResourcesTool, ReadMcpResourceTool
 model: sonnet
 color: yellow
 ---

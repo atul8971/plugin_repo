@@ -1,14 +1,7 @@
 ---
 name: jira-ticket-analyzer
 description: Use this agent when the user needs to interact with Jira tickets in any way, including fetching ticket details, analyzing ticket content (descriptions, comments, attachments), understanding documents or images attached to issues, creating or updating tickets, managing issue workflows, or generating summaries and insights from Jira data.
-
-Examples:
-- User asks to fetch or view a specific Jira ticket
-- User wants to analyze ticket attachments (screenshots, documents, error logs)
-- User needs to create or update Jira tickets
-- User requests summaries or status updates on tickets
-- User wants to understand ticket context, history, or dependencies
-
+tools: Bash, Glob, Grep, Read, Edit, Write, NotebookEdit, WebFetch, TodoWrite, WebSearch, BashOutput, Skill, SlashCommand, ListMcpResourcesTool, ReadMcpResourceTool, mcp__mcp-atlassian__jira_get_user_profile, mcp__mcp-atlassian__jira_get_issue, mcp__mcp-atlassian__jira_search, mcp__mcp-atlassian__jira_search_fields, mcp__mcp-atlassian__jira_get_project_issues, mcp__mcp-atlassian__jira_get_transitions, mcp__mcp-atlassian__jira_get_worklog, mcp__mcp-atlassian__jira_download_attachments, mcp__mcp-atlassian__jira_get_agile_boards, mcp__mcp-atlassian__jira_get_board_issues, mcp__mcp-atlassian__jira_get_sprints_from_board, mcp__mcp-atlassian__jira_get_sprint_issues, mcp__mcp-atlassian__jira_get_link_types, mcp__mcp-atlassian__jira_create_issue, mcp__mcp-atlassian__jira_batch_create_issues, mcp__mcp-atlassian__jira_batch_get_changelogs, mcp__mcp-atlassian__jira_update_issue, mcp__mcp-atlassian__jira_delete_issue, mcp__mcp-atlassian__jira_add_comment, mcp__mcp-atlassian__jira_add_worklog, mcp__mcp-atlassian__jira_link_to_epic, mcp__mcp-atlassian__jira_create_issue_link, mcp__mcp-atlassian__jira_create_remote_issue_link, mcp__mcp-atlassian__jira_remove_issue_link, mcp__mcp-atlassian__jira_transition_issue, mcp__mcp-atlassian__jira_create_sprint, mcp__mcp-atlassian__jira_update_sprint, mcp__mcp-atlassian__jira_get_project_versions, mcp__mcp-atlassian__jira_get_all_projects, mcp__mcp-atlassian__jira_create_version, mcp__mcp-atlassian__jira_batch_create_versions, mcp__mcp-atlassian__confluence_search, mcp__mcp-atlassian__confluence_get_page, mcp__mcp-atlassian__confluence_get_page_children, mcp__mcp-atlassian__confluence_get_comments, mcp__mcp-atlassian__confluence_get_labels, mcp__mcp-atlassian__confluence_add_label, mcp__mcp-atlassian__confluence_create_page, mcp__mcp-atlassian__confluence_update_page, mcp__mcp-atlassian__confluence_delete_page, mcp__mcp-atlassian__confluence_add_comment, mcp__mcp-atlassian__confluence_search_user
 model: sonnet
 color: blue
 ---
