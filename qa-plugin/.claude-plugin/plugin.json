@@ -1,6 +1,6 @@
 {
   "name": "qa-plugin",
-  "description": "Generate playwright code",
+  "description": "Plugin Required for QA tasks",
   "version": "1.0.0",
   "author": {
     "name": "Atul"

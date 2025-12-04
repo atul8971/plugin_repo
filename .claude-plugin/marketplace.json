@@ -1,7 +1,7 @@
 {
-"name": "test-marketplace",
+"name": "qa-plugin-marketplace",
 "owner": {
-"name": "Test User"
+"name": "Atul"
 },
 "plugins": [
 {
