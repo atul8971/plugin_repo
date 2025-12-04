@@ -1,13 +1,13 @@
 {
-"name": "qa-plugin-marketplace",
-"owner": {
-"name": "Atul"
-},
-"plugins": [
-{
-  "name": "qa-plugin",
-  "source": "./qa-plugin",
-  "description": "All Plugin Required for QA"
-}
-]
+  "name": "qa-plugin-marketplace",
+  "owner": {
+    "name": "Atul"
+  },
+  "plugins": [
+    {
+      "name": "qa-plugin",
+      "source": "./qa-plugin",
+      "description": "All Plugin Required for QA"
+    }
+  ]
 }

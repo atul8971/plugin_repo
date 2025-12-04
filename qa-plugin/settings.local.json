@@ -1,9 +1,6 @@
 {
   "permissions": {
-    "allow": [
-      "mcp__playwright__*",
-      "Bash(mkdir:*)"
-    ],
+    "allow": ["mcp__playwright__*", "Bash(mkdir:*)"],
     "deny": [],
     "ask": []
   }
