@@ -17,12 +17,18 @@ First, analyze the user's input to understand what needs to be done:
    - Spreadsheet ID
    - Sheet name
 
-3. **Extract Task Details**:
+3. **Extract Figma Design Information** (if provided):
+
+   - Figma file URL (e.g., "https://figma.com/file/abc123/Design-Name")
+   - Specific screens or flows to focus on
+   - Design-related requirements
+
+4. **Extract Task Details**:
 
    - What action should be performed (e.g., "create test cases", "update test status", "extract requirements")
    - Any specific parameters or filters
 
-4. **Extract Number of Test Cases** (if provided):
+5. **Extract Number of Test Cases** (if provided):
    - Number of test cases to generate (e.g., "10 test cases", "generate 25 tests")
    - If not specified, default to 20 test cases
 
@@ -36,10 +42,23 @@ If any required information is missing or unclear, use the AskUserQuestion tool 
 
 - Jira ticket ID/URL (if Jira analysis is needed)
 - Google Sheets link (if sheet operations are needed)
+- Figma design URL (if Figma analysis is needed)
 - Task details describing what action to perform
 - Number of test cases to generate (default: 20 if not specified)
 
-### Step 2: Jira Analysis (if Jira ticket provided)
+### Step 2: Figma Design Analysis (if Figma link provided)
+
+If a Figma design URL is provided:
+
+1. Use the Task tool with `subagent_type='figma-agent'` to:
+
+   - Generate detailed test steps referencing exact UI elements from Figma
+   - Create comprehensive functional, visual, and usability test cases
+   - Ensure test cases align with the actual design specifications
+   - Include specific test data based on design inputs and forms
+   - Cover all user flows and navigation patterns shown in the design
+
+### Step 3: Jira Analysis (if Jira ticket provided)
 
 If a Jira ticket ID or URL is provided:
 
@@ -60,7 +79,7 @@ If a Jira ticket ID or URL is provided:
    - If task is "analyze requirements": Identify functional and non-functional requirements
    - Custom task handling based on user's specific task_details
 
-### Step 3: Test Case Generation (if test generation is needed)
+### Step 4: Test Case Generation (if test generation is needed)
 
 If the task requires generating comprehensive test cases:
 
@@ -140,8 +159,9 @@ Before generating new test cases, ALWAYS check if test cases already exist:
      - **Ensure no duplicate test cases by excluding scenarios already covered**
      - Create detailed test steps with preconditions, expected results, and test data
      - Focus on filling gaps in existing test coverage
-     - **CRITICAL: Do NOT hallucinate test details** - only create test cases based on actual requirements from Jira or user input
+     - **CRITICAL: Do NOT hallucinate test details** - only create test cases based on actual requirements from Jira, Figma, or user input
      - If information is missing or unclear, use generic test steps or ask for clarification rather than inventing details
+     - When Figma designs are available, include detailed UI/UX test cases with specific element references
 
 4. When to use the test-generator:
 
@@ -155,13 +175,14 @@ Before generating new test cases, ALWAYS check if test cases already exist:
 5. Test generation workflow:
    - **First: Check for existing test cases** (from Google Sheets or local test files)
    - Analyze existing coverage and identify gaps
-   - Gather requirements (from Jira or user input)
+   - Gather requirements (from Jira, Figma, or user input)
    - Extract the number of test cases to generate from user input (default: 20 if not specified)
    - Invoke the test-generator agent with the requirements, number of test cases, AND information about existing tests
+   - If Figma designs are provided, ensure test cases include specific UI element references from the design
    - Receive comprehensive test suite covering all categories, excluding duplicates
    - Optionally write the generated test cases to Google Sheets (appending to existing cases, not replacing)
 
-### Step 4: Google Sheets Operations (if sheet link provided)
+### Step 5: Google Sheets Operations (if sheet link provided)
 
 If a Google Sheets link is provided:
 
@@ -196,7 +217,35 @@ When writing test cases to Google Sheets, ensure the sheet has these column head
    - **"sync from jira"**: Fetch Jira data and populate/update Google Sheets
    - Custom operations based on user's specific needs
 
-### Step 5: Combined Workflow
+### Step 6: Combined Workflow
+
+**Figma + Test Generator Workflow:**
+When Figma design link is provided and test generation is needed:
+
+1. Invoke the figma-agent to fetch and analyze the Figma design file
+2. Extract UI flows, user journeys, interactive elements, and design specifications
+3. Check for existing test cases (local test files or any provided sheet)
+4. Extract the number of test cases to generate from user input (default: 20)
+5. Invoke the test-generator agent with:
+   - Extracted UI flows and design specifications from Figma
+   - Specified number of test cases to generate
+   - Existing test case information
+6. Receive comprehensive test suite with detailed UI/UX test cases that reference specific design elements
+7. Report the generated test cases to the user
+
+**Figma + Jira + Test Generator Workflow:**
+When both Figma design and Jira ticket are provided:
+
+1. Invoke the figma-agent to analyze the design and extract UI flows
+2. Invoke the jira-ticket-analyzer agent to fetch requirements and acceptance criteria
+3. Check for existing test cases (local test files or any provided sheet)
+4. Extract the number of test cases to generate from user input (default: 20)
+5. Invoke the test-generator agent with:
+   - Combined requirements from both Jira (functional specs) and Figma (UI/UX specs)
+   - Specified number of test cases to generate
+   - Existing test case information
+6. Receive comprehensive test suite covering both functional requirements and design specifications
+7. Report the generated test cases to the user
 
 **Jira + Test Generator Workflow:**
 When Jira ticket is provided and test generation is needed:
@@ -218,6 +267,28 @@ When both Jira ticket and Google Sheets are provided:
 4. Invoke the google-sheets-manager agent to perform the sheet operations (append, not replace)
 5. Ensure data flows correctly from Jira → Processing → Google Sheets
 
+**Figma + Jira + Test Generator + Google Sheets Workflow:**
+For complete test case management with design specifications (recommended):
+
+1. **First: Read existing test cases** - Invoke the google-sheets-manager agent to read current test cases from Google Sheets
+2. Analyze existing test coverage and identify gaps
+3. Extract the number of test cases to generate from user input (default: 20)
+4. Invoke the figma-agent to analyze the design and extract UI flows and specifications
+5. Invoke the jira-ticket-analyzer agent to fetch Jira ticket details and extract requirements
+6. Invoke the test-generator agent with:
+   - Extracted UI flows and design specifications from Figma
+   - Extracted requirements from Jira
+   - Specified number of test cases to generate
+   - Information about existing test cases
+   - Specific gaps to fill in test coverage
+7. Invoke the google-sheets-manager agent to **append** the generated test cases to Google Sheets (not replace existing ones)
+8. Ensure data flows: Existing Tests (Read) → Figma + Jira → Test Generator → Google Sheets (Append)
+9. Report completion with summary of:
+   - Number of existing test cases found
+   - Number of new test cases created
+   - Total test coverage achieved
+   - Sheet location
+
 **Jira + Test Generator + Google Sheets Workflow:**
 For complete test case management (recommended):
 
@@ -238,14 +309,16 @@ For complete test case management (recommended):
    - Total test coverage achieved
    - Sheet location
 
-Example combined workflow for "create test cases from Jira":
+Example combined workflow for "create test cases from Jira and Figma":
 
 - **Step 1: Read existing test cases** from Google Sheets (if provided) or local test files
 - Analyze existing coverage: identify what test scenarios, categories, and edge cases are already covered
 - Extract the number of test cases to generate from user input (default: 20)
-- Fetch Jira ticket details and extract requirements, acceptance criteria, and specifications
-- Generate comprehensive test suite using test-generator (functional, negative, edge, e2e, integration tests)
+- Fetch Figma design specifications and extract UI flows, elements, and interactions (if Figma link provided)
+- Fetch Jira ticket details and extract requirements, acceptance criteria, and specifications (if Jira ticket provided)
+- Generate comprehensive test suite using test-generator (functional, negative, edge, e2e, integration tests, UI/UX tests)
   - Generate the specified number of test cases
+  - Include detailed UI element references from Figma design (if available)
   - **Explicitly exclude already-covered test scenarios**
   - Focus on filling gaps in test coverage
 - Structure new test cases into the required Google Sheets format (Test Case ID, Category, Priority, Test Objective, Preconditions, Test Steps, Expected Results)
@@ -259,19 +332,22 @@ Example combined workflow for "create test cases from Jira":
 
 Here are common task_details and how they should be handled:
 
-| Task Detail                                  | Action                                                                                                                                                                                     |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| "extract test scenarios"                     | Get Jira ticket, parse acceptance criteria, return structured test scenarios                                                                                                               |
-| "create test cases" or "generate test cases" | **Check existing tests first**, extract number of test cases (default: 20), get Jira ticket (if provided), use test-generator to create comprehensive test suite (excluding duplicates)    |
-| "create test cases in sheet"                 | **Read existing test cases from sheet**, extract number of test cases (default: 20), get Jira ticket, use test-generator to create test cases, **append** to Google Sheets                 |
-| "generate comprehensive test suite"          | **Check existing test coverage**, extract number of test cases (default: 20), use test-generator to create functional, negative, edge, e2e, and integration test cases (filling gaps only) |
-| "add missing tests"                          | **Read existing tests**, extract number of test cases (default: 20), identify gaps in coverage, use test-generator to create only missing test cases                                       |
-| "update test execution status"               | Read Google Sheets, update status columns based on criteria                                                                                                                                |
-| "sync jira bugs to sheet"                    | **Check for existing bugs in sheet**, fetch Jira bug details, append new bugs to Google Sheets (avoid duplicates)                                                                          |
-| "generate test report"                       | Read Google Sheets test data, analyze, create summary report                                                                                                                               |
-| "export jira to excel format"                | Fetch Jira data, structure as tabular data, write to Google Sheets                                                                                                                         |
-| "create test coverage for feature"           | **Check existing test coverage**, extract number of test cases (default: 20), analyze feature requirements, use test-generator to create complete test coverage (filling gaps)             |
-| "audit test coverage"                        | Read existing test cases, analyze coverage gaps, report what's missing                                                                                                                     |
+| Task Detail                                  | Action                                                                                                                                                                                                 |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| "extract test scenarios"                     | Get Jira ticket, parse acceptance criteria, return structured test scenarios                                                                                                                           |
+| "create test cases" or "generate test cases" | **Check existing tests first**, extract number of test cases (default: 20), get Jira/Figma (if provided), use test-generator to create comprehensive test suite (excluding duplicates)                |
+| "create test cases from figma"               | **Check existing tests first**, extract number of test cases (default: 20), use figma-agent to analyze design, use test-generator to create UI/UX test cases with specific element references         |
+| "create test cases from figma and jira"      | **Check existing tests first**, extract number of test cases (default: 20), use figma-agent + jira-ticket-analyzer, use test-generator to create comprehensive test suite with design specifications |
+| "create test cases in sheet"                 | **Read existing test cases from sheet**, extract number of test cases (default: 20), get Jira/Figma, use test-generator to create test cases, **append** to Google Sheets                             |
+| "generate comprehensive test suite"          | **Check existing test coverage**, extract number of test cases (default: 20), use test-generator to create functional, negative, edge, e2e, and integration test cases (filling gaps only)             |
+| "add missing tests"                          | **Read existing tests**, extract number of test cases (default: 20), identify gaps in coverage, use test-generator to create only missing test cases                                                   |
+| "analyze figma design"                       | Use figma-agent to fetch UI flows, interactions, and design specifications from Figma file                                                                                                             |
+| "update test execution status"               | Read Google Sheets, update status columns based on criteria                                                                                                                                            |
+| "sync jira bugs to sheet"                    | **Check for existing bugs in sheet**, fetch Jira bug details, append new bugs to Google Sheets (avoid duplicates)                                                                                      |
+| "generate test report"                       | Read Google Sheets test data, analyze, create summary report                                                                                                                                           |
+| "export jira to excel format"                | Fetch Jira data, structure as tabular data, write to Google Sheets                                                                                                                                     |
+| "create test coverage for feature"           | **Check existing test coverage**, extract number of test cases (default: 20), analyze feature requirements, use test-generator to create complete test coverage (filling gaps)                         |
+| "audit test coverage"                        | Read existing test cases, analyze coverage gaps, report what's missing                                                                                                                                 |
 
 ## Instructions
 
@@ -280,6 +356,7 @@ When the user invokes this command:
 1. **Parse the user input** to identify:
 
    - Jira ticket references
+   - Figma design URLs (look for "figma.com/file/" links)
    - Google Sheets URLs
    - Task details (what action to perform)
    - Number of test cases to generate (look for phrases like "10 test cases", "generate 25 tests", "create 30", etc.)
@@ -287,24 +364,28 @@ When the user invokes this command:
 2. **Validate inputs**:
 
    - If Jira ticket is mentioned but not clearly identified, ask for ticket ID/URL
+   - If Figma design is mentioned but no link provided, ask for Figma URL
    - If Google Sheets is mentioned but no link provided, ask for sheet URL
    - If task_details is unclear, ask what specific action should be performed
    - If number of test cases is not specified, default to 20
 
 3. **Execute in proper sequence**:
 
-   - Jira operations first (if needed) to gather source data
+   - Figma operations first (if needed) to gather UI/UX specifications
+   - Jira operations next (if needed) to gather functional requirements
    - Process and transform data based on task_details
    - Google Sheets operations last (if needed) to write/update data
 
 4. **Provide clear feedback**:
 
-   - Summarize what was fetched from Jira
+   - Summarize what was fetched from Figma (UI flows, design specifications)
+   - Summarize what was fetched from Jira (requirements, acceptance criteria)
    - Describe what operations were performed on Google Sheets
    - Report any errors or issues encountered
    - Confirm completion with relevant details
 
 5. **Error handling**:
+   - If Figma link is invalid or inaccessible, report clearly and ask for correct link
    - If Jira ticket not found, report clearly and offer alternatives
    - If Google Sheets access fails, explain the issue
    - If task_details cannot be understood, ask for clarification
@@ -318,7 +399,7 @@ When the user invokes this command:
 **Now execute**:
 
 1. Analyze the user input above
-2. Determine what resources are provided (Jira ticket, Google Sheets, task_details, number of test cases)
+2. Determine what resources are provided (Figma link, Jira ticket, Google Sheets, task_details, number of test cases)
 3. Extract the number of test cases to generate (default: 20 if not specified)
 4. If information is missing, use AskUserQuestion to gather required details
 5. **CRITICAL: If the task involves creating/generating test cases, FIRST check for existing test cases:**
@@ -327,8 +408,9 @@ When the user invokes this command:
    - Analyze existing test coverage to identify what already exists and what gaps need to be filled
 6. Invoke appropriate agents in the correct sequence:
    - google-sheets-manager (FIRST - to read existing test cases if sheet is provided)
+   - figma-agent (if Figma link provided and UI/UX specifications need to be extracted)
    - jira-ticket-analyzer (if Jira ticket provided and requirements need to be extracted)
-   - test-generator (if test case generation is needed - provide existing test info and number of test cases to avoid duplicates)
+   - test-generator (if test case generation is needed - provide existing test info, Figma specs, Jira requirements, and number of test cases to avoid duplicates)
    - google-sheets-manager (LAST - to append new test cases to sheet if provided)
 7. Process results according to task_details
 8. Provide clear summary of actions performed and results including:
@@ -337,15 +419,19 @@ When the user invokes this command:
    - Number of new test cases created
    - Total test coverage achieved
    - What gaps were filled
+   - UI/UX coverage from Figma (if applicable)
 
 **Recommended workflow for comprehensive test case creation:**
 
 - **ALWAYS check for existing test cases BEFORE generating new ones** - this prevents duplication and ensures efficient test coverage
 - **Extract the number of test cases to generate from user input** (default: 20 if not specified)
+- **If Figma link is provided, FIRST use figma-agent to get UI flows information** - this enables generation of detailed UI/UX test cases with specific element references
 - When the task involves creating or generating test cases, ALWAYS use the test-generator agent
 - Provide the test-generator with:
   - Information about existing test cases so it can focus on filling gaps
+  - UI flows and design specifications from Figma (if available)
+  - Functional requirements from Jira (if available)
   - The specified number of test cases to generate
-- The test-generator creates comprehensive test suites covering: functional, negative, edge cases, end-to-end, integration tests, and AI evaluation tests (when applicable)
+- The test-generator creates comprehensive test suites covering: functional, negative, edge cases, end-to-end, integration tests, UI/UX tests, and AI evaluation tests (when applicable)
 - When writing to Google Sheets, APPEND new test cases rather than replacing existing ones
 - This ensures complete test coverage without duplication and follows testing best practices
