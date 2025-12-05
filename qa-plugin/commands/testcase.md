@@ -71,9 +71,31 @@ All generated test cases MUST follow this exact format with these columns:
 - **Category**: Test category (e.g., Functional, Negative, Edge Case, Integration, E2E)
 - **Priority**: Test priority (e.g., High, Medium, Low, Critical)
 - **Test Objective**: Clear description of what is being tested
-- **Preconditions**: Setup requirements or conditions before test execution
-- **Test Steps**: Numbered step-by-step instructions to execute the test
-- **Expected Results**: Expected outcome for each step or overall test
+- **Preconditions**: Setup requirements or conditions before test execution. Each precondition MUST be on a new line within the cell (use line breaks between points)
+- **Test Steps**: Numbered step-by-step instructions to execute the test. Each step MUST be on a new line within the cell (use line breaks between steps)
+- **Expected Results**: Expected outcome for each step or overall test. Each expected result MUST be on a new line within the cell (use line breaks between points)
+
+**Formatting Example:**
+- Preconditions cell should contain:
+  ```
+  1. User is logged in
+  2. User has admin privileges
+  3. Test data is available
+  ```
+- Test Steps cell should contain:
+  ```
+  1. Navigate to dashboard
+  2. Click on settings menu
+  3. Select user management
+  4. Click add new user button
+  ```
+- Expected Results cell should contain:
+  ```
+  1. Dashboard loads successfully
+  2. Settings menu opens
+  3. User management page displays
+  4. New user form appears
+  ```
 
 **IMPORTANT: Check for Existing Test Cases First**
 
@@ -134,9 +156,14 @@ When writing test cases to Google Sheets, ensure the sheet has these column head
 2. Category
 3. Priority
 4. Test Objective
-5. Preconditions
-6. Test Steps
-7. Expected Results
+5. Preconditions (each precondition on a new line within the cell)
+6. Test Steps (each step on a new line within the cell)
+7. Expected Results (each result on a new line within the cell)
+
+**CRITICAL: Multi-line Cell Formatting**
+- For Preconditions, Test Steps, and Expected Results columns, use newline characters (`\n`) to separate each point within the cell
+- In Google Sheets API, use `\n` to create line breaks within a single cell value
+- Example: `"1. User is logged in\n2. User has admin privileges\n3. Test data is available"`
 
 1. Use the Task tool with `subagent_type='google-sheets-manager'` to:
 
