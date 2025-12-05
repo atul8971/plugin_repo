@@ -55,13 +55,25 @@ You will analyze the provided functionality and generate a complete, non-duplica
    - Microservice communication patterns
 
 6. **AI Evaluation Test Cases** (ONLY if AI/ML components are present):
-   - Output quality and relevance using appropriate metrics (accuracy, precision, recall, F1, perplexity, BLEU, ROUGE, etc.)
+
+   **For LLM-based applications ONLY** (chatbots, conversational AI, content generation, question-answering systems, RAG applications, etc.), include these specific evaluation metrics:
+   - **Answer Relevancy**: Measure how relevant the LLM's response is to the user's query
+   - **Faithfulness**: Verify the LLM's response is grounded in the provided context/source material without adding unsupported information
+   - **Contextual Relevancy**: Assess whether the retrieved/provided context is relevant to answering the query
+   - **Bias Detection**: Evaluate responses for unfair bias across demographics, topics, or viewpoints
+   - **Context Precision**: Measure if all relevant context items are ranked higher than irrelevant context items
+   - **Context Recall**: Verify if all relevant information needed to answer the query is present in the retrieved context
+   - **Hallucination Detection**: Identify when the LLM generates factually incorrect or unsupported information
+   - **Tool Selection Accuracy**: For LLM agents with tool/function calling capabilities, verify correct tool selection and usage
+   - Prompt injection attempts and jailbreak resistance
+   - Consistency across multiple runs with same inputs
+   - Response time and latency under varying loads
+
+   **For other AI/ML features** (image classification, recommendation systems, traditional ML models, sentiment analysis, etc.) - DO NOT use LLM-specific metrics:
+   - Output quality using appropriate metrics (accuracy, precision, recall, F1, MAE, RMSE, perplexity, BLEU, ROUGE, etc.)
    - Consistency across multiple runs with same inputs
    - Response time and performance under varying loads
-   - Hallucination detection and factual accuracy
-   - Bias and fairness evaluation where applicable
    - Model drift detection strategies
-   - Prompt injection attempts (for LLM-based features)
    - AI-specific adversarial inputs
 
 ## Operational Guidelines
