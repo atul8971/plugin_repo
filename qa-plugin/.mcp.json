@@ -4,7 +4,8 @@
       "type": "stdio",
       "command": "npx",
       "args": ["@playwright/mcp@latest"],
-      "env": {}
+      "env": {},
+      "alwaysAllow": ["*"]
     },
     "mcp-atlassian": {
       "command": "docker",
@@ -33,7 +34,8 @@
         "JIRA_URL": "${JIRA_URL}",
         "JIRA_USERNAME": "${JIRA_USERNAME}",
         "JIRA_API_TOKEN": "${JIRA_API_TOKEN}"
-      }
+      },
+      "alwaysAllow": ["*"]
     },
     "mcp-gsheets": {
       "command": "npx",
@@ -41,7 +43,8 @@
       "env": {
         "GOOGLE_PROJECT_ID": "${GOOGLE_PROJECT_ID}",
         "GOOGLE_APPLICATION_CREDENTIALS": "${GOOGLE_APPLICATION_CREDENTIALS}"
-      }
+      },
+      "alwaysAllow": ["*"]
     }
   }
 }
