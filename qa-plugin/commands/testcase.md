@@ -75,6 +75,20 @@ All generated test cases MUST follow this exact format with these columns:
 - **Test Steps**: Numbered step-by-step instructions to execute the test. Each step MUST be on a new line within the cell (use line breaks between steps)
 - **Expected Results**: Expected outcome for each step or overall test. Each expected result MUST be on a new line within the cell (use line breaks between points)
 
+**CRITICAL: No Hallucination Policy**
+- **DO NOT hallucinate or invent Test Steps, Expected Results, or Preconditions**
+- Only include information that can be directly derived from:
+  - Jira ticket description, acceptance criteria, and requirements
+  - User-provided specifications
+  - Existing documentation or test cases
+  - Clear, verifiable feature behavior
+- If certain details are unclear or missing from the source material:
+  - Use generic, reasonable test steps that follow standard testing practices
+  - Mark uncertain areas with "[Verify with team]" or "[Confirm expected behavior]"
+  - Ask the user for clarification when critical information is missing
+- **Be accurate and truthful** - better to have fewer, correct test cases than many test cases with made-up details
+- Base all test case details on actual requirements, not assumptions
+
 **Formatting Example:**
 - Preconditions cell should contain:
   ```
@@ -126,6 +140,8 @@ Before generating new test cases, ALWAYS check if test cases already exist:
      - **Ensure no duplicate test cases by excluding scenarios already covered**
      - Create detailed test steps with preconditions, expected results, and test data
      - Focus on filling gaps in existing test coverage
+     - **CRITICAL: Do NOT hallucinate test details** - only create test cases based on actual requirements from Jira or user input
+     - If information is missing or unclear, use generic test steps or ask for clarification rather than inventing details
 
 4. When to use the test-generator:
 
